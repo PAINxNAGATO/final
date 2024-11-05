@@ -64,9 +64,10 @@ const PORT = ENV_VARS.PORT || 3000;
 
 // Initially allow all origins in development
 app.use(cors({
-  origin: "*",  // We'll update this after frontend deployment
-  credentials: true,
-}));
+	origin: 'http://localhost:5173', // Update this with your frontend's URL
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
+	credentials: true, // Allow credentials if needed
+  }));
 
 app.use(express.json());
 app.use(cookieParser());
