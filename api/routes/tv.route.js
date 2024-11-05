@@ -1,18 +1,69 @@
 import express from "express";
-import {
-	getSimilarTvs,
-	getTrendingTv,
-	getTvDetails,
-	getTvsByCategory,
-	getTvTrailers,
-} from "../controllers/tv.controller.js";
+import { fetchFromTMDB } from "../services/tmdb.service.js";
 
 const router = express.Router();
 
-router.get("/trending", getTrendingTv);
-router.get("/:id/trailers", getTvTrailers);
-router.get("/:id/details", getTvDetails);
-router.get("/:id/similar", getSimilarTvs);
-router.get("/:category", getTvsByCategory);
+router.get("/trending", async(req,res)=>{
+	try {
+		const data = await fetchFromTMDB("https://api.themoviedb.org/3/trending/tv/day?language=en-US");
+		const randomMovie = data.results[Math.floor(Math.random() * data.results?.length)];
+
+		res.json({ success: true, content: randomMovie });
+	} catch (error) {
+		res.status(500).json({ success: false, message: "Internal Server Error" });
+	}
+});
+
+
+router.get("/:id/trailers", async(req,res)=>{
+	const { id } = req.params;
+	try {
+		const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}/videos?language=en-US`);
+		res.json({ success: true, trailers: data.results });
+	} catch (error) {
+		if (error.message.includes("404")) {
+			return res.status(404).send(null);
+		}
+
+		res.status(500).json({ success: false, message: "Internal Server Error" });
+	}
+});
+
+
+router.get("/:id/details", async(req,res)=>{
+	const { id } = req.params;
+	try {
+		const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}?language=en-US`);
+		res.status(200).json({ success: true, content: data });
+	} catch (error) {
+		if (error.message.includes("404")) {
+			return res.status(404).send(null);
+		}
+
+		res.status(500).json({ success: false, message: "Internal Server Error" });
+	}
+});
+
+
+router.get("/:id/similar", async(req,res)=>{
+	const { id } = req.params;
+	try {
+		const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${id}/similar?language=en-US&page=1`);
+		res.status(200).json({ success: true, similar: data.results });
+	} catch (error) {
+		res.status(500).json({ success: false, message: "Internal Server Error" });
+	}
+});
+
+
+router.get("/:category", async(req,res)=>{
+	const { category } = req.params;
+	try {
+		const data = await fetchFromTMDB(`https://api.themoviedb.org/3/tv/${category}?language=en-US&page=1`);
+		res.status(200).json({ success: true, content: data.results });
+	} catch (error) {
+		res.status(500).json({ success: false, message: "Internal Server Error" });
+	}
+});
 
 export default router;
