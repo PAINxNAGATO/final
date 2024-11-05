@@ -74,6 +74,9 @@ const PORT = ENV_VARS.PORT || 3000;
 
 app.use(cors({
   origin: '*', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD'],
+  origin: ['http://localhost:5173', 'https://final-frontend-kohl.vercel.app'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // Include if your requests include credentials
 }));
 
