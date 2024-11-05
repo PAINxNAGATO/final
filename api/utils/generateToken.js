@@ -6,13 +6,16 @@ export const generateTokenAndSetCookie = (userId, res) => {
     expiresIn: "15d" 
   });
 
-  // Cookie settings that will work across environments
+  // Cookie settings that match your CORS configuration
   const cookieOptions = {
-    maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days in MS
-    httpOnly: true,                    // Prevent XSS attacks
-    sameSite: 'lax',                  // Changed from 'none' to 'lax'
-    secure: process.env.NODE_ENV === 'production', // Secure in production
-    path: '/',                        // Explicit path
+    maxAge: 15 * 24 * 60 * 60 * 1000,  // 15 days in MS
+    httpOnly: true,                     // Prevent XSS attacks
+    sameSite: 'none',                   // Allow cross-site requests
+    secure: true,                       // Required for sameSite: 'none'
+    path: '/',                          // Cookie is available for all paths
+    domain: ENV_VARS.NODE_ENV === 'production' 
+      ? '.vercel.app'                   // Allow sharing between your vercel domains
+      : undefined                       // Use default for localhost
   };
 
   res.cookie("jwt-netflix", token, cookieOptions);
