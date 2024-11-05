@@ -64,10 +64,18 @@ const PORT = ENV_VARS.PORT || 3000;
 
 // Initially allow all origins in development
 app.use(cors({
-	origin: 'https://final-frontend-kohl.vercel.app',
+	// origin: 'https://final-frontend-kohl.vercel.app',
+  origin: '*',
 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
 	credentials: true, // Allow credentials if needed
   }));
+
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
+//   res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE"); // Allowed HTTP methods
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"); // Allowed headers
+//   next();
+// });
 
 app.use(express.json());
 app.use(cookieParser());
