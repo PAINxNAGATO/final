@@ -70,7 +70,11 @@ const PORT = ENV_VARS.PORT || 3000;
 // 	credentials: true, // Allow credentials if needed
 //   }));
 
-app.use(cors());
+const cors = require('cors');
+app.use(cors({
+  origin: '*', // Replace with your frontend URL
+  credentials: true, // Include if your requests include credentials
+}));
 
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
