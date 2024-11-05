@@ -70,7 +70,8 @@ const PORT = ENV_VARS.PORT || 3000;
 // 	credentials: true, // Allow credentials if needed
 //   }));
 
-const cors = require('cors');
+// const cors = require('cors');
+
 app.use(cors({
   origin: '*', // Replace with your frontend URL
   credentials: true, // Include if your requests include credentials
