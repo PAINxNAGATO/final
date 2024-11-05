@@ -70,6 +70,8 @@ const PORT = ENV_VARS.PORT || 3000;
 // 	credentials: true, // Allow credentials if needed
 //   }));
 
+app.use(cors());
+
 // app.use((req, res, next) => {
 //   res.header("Access-Control-Allow-Origin", "*"); // Allow all origins
 //   res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE"); // Allowed HTTP methods
